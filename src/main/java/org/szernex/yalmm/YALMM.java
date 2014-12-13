@@ -6,6 +6,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import org.szernex.yalmm.handler.ConfigHandler;
 import org.szernex.yalmm.handler.PlayerLoginHandler;
 import org.szernex.yalmm.reference.Reference;
+import org.szernex.yalmm.util.FileHelper;
 
 @Mod(modid = Reference.MOD_ID, version = Reference.VERSION, name = Reference.MOD_NAME, acceptableRemoteVersions = "*")
 public class YALMM
@@ -20,5 +21,7 @@ public class YALMM
 
 		FMLCommonHandler.instance().bus().register(new ConfigHandler());
 		FMLCommonHandler.instance().bus().register(new PlayerLoginHandler());
+
+		FileHelper.initFile(ConfigHandler.messageFile);
 	}
 }
