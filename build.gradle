@@ -1,0 +1,89 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+
+apply plugin: 'forge'
+
+
+ext.bumpBuildProperty = "newBuild"
+ext.propertiesFile = "build.properties"
+
+
+ext.configFile = file propertiesFile
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+version = "${config.mc_version}-${config.mod_version}.${getBuildNumber()}"
+group = "org.szernex.yalmm"
+archivesBaseName = "YALMM"
+
+
+minecraft {
+    version = config.mc_version + "-" + config.forge_version
+
+    replaceIn "reference/Reference.java"
+    replace "@VERSION@", config.mod_version + "." + getBuildNumber()
+
+    srgExtra "PK: org/apache/commons/net org/szernex/yabm/commons-net"
+}
+
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'mod_version':config.mod_version, 'mc_version':config.mc_version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+def int getBuildNumber() {
+    def buildNumber = Integer.parseInt(config.build_number) + (project.hasProperty(project.bumpBuildProperty) ? 1 : 0)
+    def newNr = "build_number = " + buildNumber
+    def file = new File(project.propertiesFile)
+
+    file.write(file.getText("UTF-8").replaceAll("build_number =.*", newNr))
+
+    return buildNumber
+}
+
+task resetBuild << {
+    def file = new File(project.propertiesFile)
+
+    file.write(file.getText("UTF-8").replaceAll("build_number =.*", "build_number = 0"))
+}
+
+task release << {
+    getBuildNumber()
+}
+
+release.onlyIf { project.hasProperty(ext.bumpBuildProperty) }
+
+jar.dependsOn release
