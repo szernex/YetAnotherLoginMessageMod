@@ -2,20 +2,19 @@ package org.szernex.yalmm.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
-import org.apache.commons.io.FileUtils;
 import org.szernex.yalmm.core.MessageTask;
-import org.szernex.yalmm.util.LogHelper;
+import org.szernex.yalmm.util.FileHelper;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 
 public class PlayerLoginHandler
 {
 	private long lastModifiedTimestamp = 0;
-	private String loginMessage = null;
+	private List<String> loginMessage = null;
 
-	private void loadLoginMessage(String path)
+	/*private void loadLoginMessage(String path)
 	{
 		try
 		{
@@ -57,12 +56,18 @@ public class PlayerLoginHandler
 			LogHelper.error("Error while reading message file " + path + ": " + ex.getMessage());
 			ex.printStackTrace();
 		}
-	}
+	}*/
 
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		loadLoginMessage(ConfigHandler.messageFile);
+		File file = new File(ConfigHandler.messageFile);
+
+		if (file.lastModified() > lastModifiedTimestamp)
+		{
+			loginMessage = FileHelper.readFile(ConfigHandler.messageFile);
+			lastModifiedTimestamp = file.lastModified();
+		}
 
 		if (loginMessage == null)
 		{

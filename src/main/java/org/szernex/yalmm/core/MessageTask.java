@@ -3,11 +3,12 @@ package org.szernex.yalmm.core;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 
+import java.util.List;
 import java.util.TimerTask;
 
 public class MessageTask extends TimerTask
 {
-	private String loginMessage;
+	private List<String> loginMessage;
 	private EntityPlayer targetPlayer;
 
 	public MessageTask()
@@ -15,11 +16,11 @@ public class MessageTask extends TimerTask
 		super();
 	}
 
-	public MessageTask(String message, EntityPlayer player)
+	public MessageTask(List<String> message, EntityPlayer player)
 	{
 		super();
 
-		loginMessage = message.replaceAll("\r", ""); // get rid of the carriage return
+		loginMessage = message;
 		targetPlayer = player;
 	}
 
@@ -28,11 +29,9 @@ public class MessageTask extends TimerTask
 	{
 		if (loginMessage != null)
 		{
-			String[] lines = loginMessage.split("\n");
-
-			for (int i = 0; i < lines.length; i++)
+			for (String line : loginMessage)
 			{
-				targetPlayer.addChatComponentMessage(new ChatComponentText(lines[i]));
+				targetPlayer.addChatComponentMessage(new ChatComponentText(line));
 			}
 		}
 	}
