@@ -9,7 +9,7 @@ Presenting yet another very simple to use mod intended mostly for servers to dis
 * Supports multi-line messages
 
 ##Formatting help
-YALMM uses the standard Minecraft formatting codes. Keep in mind that all formatting codes only mark where the specific formatting will start. To reset it you have to add §r before the new formatting.
+YALMM uses the standard Minecraft formatting codes. Keep in mind that all formatting codes only mark where the specific formatting will start. To reset it you have to add §r before the new formatting. Also keep in mind that colors have to be defined before other fancy formatting (bold, underline etc)
 
 * §0 - Black
 * §1 - Dark Blue
