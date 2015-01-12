@@ -7,6 +7,7 @@ Presenting yet another very simple to use mod intended mostly for servers to dis
 * Configure the delay when the message should be sent after a player logs in (instantly or up to 30 seconds)
 * Supports full color coding and fancy formatting of messages
 * Supports multi-line messages
+* Automatically parses links and makes them clickable (prototype functionality)
 
 ##Formatting help
 YALMM uses the standard Minecraft formatting codes. Keep in mind that all formatting codes only mark where the specific formatting will start. To reset it you have to add §r before the new formatting. Also keep in mind that colors have to be defined before other fancy formatting (bold, underline etc)
