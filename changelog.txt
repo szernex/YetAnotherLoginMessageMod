@@ -1,0 +1,2 @@
+v1.7.10-0.1.3
++ Added prototype link parsing; everything that starts with "http" will be treated as a clickable link; currently a link resets the formatting of the message up to the link
